@@ -5,6 +5,10 @@ import br.com.caelum.contas.SaldoInsuficienteException;
 public class ContaPoupanca extends Conta {
 	
 	
+	public ContaPoupanca(int numero, String agencia, String titular, double saldo) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getTipo() {
 		return "Conta Poupança";
 	}
@@ -20,6 +24,12 @@ public class ContaPoupanca extends Conta {
 			this.saldo -= (valor	+ 0.10);
 			
 		}
+	}
+
+	@Override
+	public int compareTo(Conta o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
