@@ -1,11 +1,17 @@
 package br.com.caelum.contas;
 
+import java.util.List;
+
+import br.com.caelum.contas.modelo.Conta;
 import br.com.caelum.contas.modelo.SeguroDeVida;
 import br.com.caelum.javafx.api.util.Evento;
 
 public class ManipuladorDeSeguroDeVida {
 	
 	private SeguroDeVida seguroDeVida;
+	
+	
+
 	
 	public void criaSeguro(Evento evento) {
 		this.seguroDeVida = new SeguroDeVida();

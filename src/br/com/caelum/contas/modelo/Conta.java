@@ -1,62 +1,76 @@
 package br.com.caelum.contas.modelo;
 
-public abstract class Conta {
-	
+import br.com.caelum.contas.SaldoInsuficienteException;
+
+public abstract class Conta implements Comparable<Conta> {
+
 	private int numero;
 	protected double saldo;
 	private String agencia;
 	private Data dataDeAbertura;
 	private double limite;
 	private String titular;
+
 	
-	
-	public Conta() {
-		
+	public int ComparableTo(Conta outraConta) {
+		return this.titular.compareTo(outraConta.titular);
 	}
 	
 	
-	public Conta(int numero, double saldo, String agencia, String titular ) {
-		
+	
+	
+	@Override
+	public String toString() {
+		return "[titular=" + titular.toUpperCase() + ",	numero=" + numero + ",	agencia=" + agencia + "]";
+	}
+
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		Conta outraConta = (Conta) obj;
+		return this.numero == outraConta.numero && this.agencia.equals(outraConta.agencia);
+	}
+
+	public Conta() {
+
+	}
+
+	public Conta(int numero, double saldo, String agencia, String titular) {
+
 		this.numero = numero;
 		this.saldo = saldo;
 		this.agencia = agencia;
 		this.titular = titular;
-		
+
 	}
+
 	public Conta(int numero, String agencia) {
-	
+
 		this.numero = numero;
 		this.agencia = agencia;
 		this.titular = " ";
 	}
-	
-	
 
-	
 	public int getNumero() {
 		return numero;
 	}
-
 
 	public void setNumero(int numero) {
 		this.numero = numero;
 	}
 
-
 	public void setAgencia(String agencia) {
 		this.agencia = agencia;
 	}
-
 
 	public void setLimite(double limite) {
 		this.limite = limite;
 	}
 
-
 	public void setTitular(String titular) {
 		this.titular = titular;
 	}
-
 
 	public double getSaldo() {
 		return this.saldo + this.limite;
@@ -65,55 +79,54 @@ public abstract class Conta {
 	public String getTitular() {
 		return this.titular;
 	}
-	
-	
+
 	public Data getData() {
 		return this.dataDeAbertura;
 	}
+
 	public void setDataDeAbertura(Data data) {
 		this.dataDeAbertura = data;
 	}
-	
-	
 
 	public String getAgencia() {
 		return agencia;
 	}
-	
+
 	public void saca(double valor) {
-		this.saldo -= valor;
-	}
-
-	
-
-	public void deposita(double quantidade) {
-		if(quantidade>0) {
-		this.saldo = this.saldo + quantidade;
-		} if(quantidade < 0) {
-            this.saldo = this.saldo + 0;
+		if (this.saldo < valor) {
+			throw new SaldoInsuficienteException("Saldo	insuficiente" + "tente um valor menor");
+		} else {
+			this.saldo -= valor;
 		}
 	}
-     
-	public void transfere ( double valor, Conta conta) {
-      this.saca(valor);
-      conta.deposita(valor);
-	
+
+	public void deposita(double valor) {
+		if (valor < 0) {
+			throw new IllegalArgumentException("Você tentou depositar" + " um valor negativo");
+		} else {
+			this.saldo += valor;
+		}
 	}
-	
-    public double rendimentoMensal(double valor){
-		double rendimento = this.saldo * valor; 
+
+	public void transfere(double valor, Conta conta) {
+		this.saca(valor);
+		conta.deposita(valor);
+
+	}
+
+	public double rendimentoMensal(double valor) {
+		double rendimento = this.saldo * valor;
 		return rendimento;
-		
+
 	}
-    
-   public  String recuperarDadosParaImpressao() {
-    	String dados = "Titular: " + this.titular;
-    	dados += "\nNúmero: " + this.numero;
+
+	public String recuperarDadosParaImpressao() {
+		String dados = "Titular: " + this.titular;
+		dados += "\nNúmero: " + this.numero;
 //    	dados	+=	"\nData	de	abertura:	"	+	this.dataDeAbertura.formatada();
-    	return dados;
-    }
-   
-	public	abstract String	getTipo();
-    
+		return dados;
+	}
+
+	public abstract String getTipo();
 
 }
